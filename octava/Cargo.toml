@@ -1,0 +1,15 @@
+[package]
+name = "octava"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Self-hosted OpenAPI readiness audit. Free, no account, no phone-home."
+repository = ""
+
+[dependencies]
+serde_json = "1"
+serde_yaml = "0.9"
+
+[profile.release]
+lto = true
+strip = true
