@@ -1,11 +1,13 @@
 mod audit;
 mod docs;
+mod sdk;
 
 use std::process::ExitCode;
 
 fn usage() -> ExitCode {
     eprintln!("octava audit <openapi-file>");
     eprintln!("octava docs <openapi-file> -o <out-dir>");
+    eprintln!("octava sdk <openapi-file> --lang ts|python -o <out-dir>");
     eprintln!("Self-hosted OpenAPI toolchain. Free, no account, no phone-home.");
     ExitCode::from(2)
 }
@@ -19,6 +21,15 @@ fn main() -> ExitCode {
             let out = args.iter().position(|a| a == "-o").and_then(|i| args.get(i + 1));
             match (path, out) {
                 (Some(p), Some(o)) => run_docs(p, o),
+                _ => usage(),
+            }
+        }
+        Some("sdk") => {
+            let path = args.get(1);
+            let lang = args.iter().position(|a| a == "--lang").and_then(|i| args.get(i + 1));
+            let out = args.iter().position(|a| a == "-o").and_then(|i| args.get(i + 1));
+            match (path, lang, out) {
+                (Some(p), Some(l), Some(o)) => run_sdk(p, l, o),
                 _ => usage(),
             }
         }
@@ -63,6 +74,33 @@ fn run_audit(path: Option<&String>) -> ExitCode {
         }
     }
     ExitCode::SUCCESS
+}
+
+fn run_sdk(path: &str, lang: &str, out: &str) -> ExitCode {
+    let bytes = match std::fs::read(path) {
+        Ok(b) => b,
+        Err(e) => {
+            eprintln!("error: cannot read {path}: {e}");
+            return ExitCode::from(2);
+        }
+    };
+    let doc = match audit::parse_spec(&bytes) {
+        Ok(d) => d,
+        Err(e) => {
+            eprintln!("error: {e}");
+            return ExitCode::from(2);
+        }
+    };
+    match sdk::generate(&doc, lang, std::path::Path::new(out)) {
+        Ok(p) => {
+            println!("wrote {p}");
+            ExitCode::SUCCESS
+        }
+        Err(e) => {
+            eprintln!("error: {e}");
+            ExitCode::from(2)
+        }
+    }
 }
 
 fn run_docs(path: &str, out: &str) -> ExitCode {

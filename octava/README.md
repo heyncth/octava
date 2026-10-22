@@ -5,10 +5,16 @@ Self-hosted OpenAPI readiness audit. Free, Apache-2.0, no account, no phone-home
 ## Usage
 
 ```
-octava <openapi-file>
+octava audit <openapi-file>
+octava docs <openapi-file> -o <out-dir>
+octava sdk <openapi-file> --lang ts|python -o <out-dir>
 ```
 
-Parses OpenAPI 3.0/3.1/3.2 (JSON or YAML), runs 14 weighted readiness rules, prints score /10 and band (Strong >= 8.0, Mixed >= 6.0, Weak < 6.0). Swagger 2.0 must be converted first. Size limit 5 MB.
+`audit` scores OpenAPI 3.0/3.1/3.2 (JSON or YAML) on 14 weighted readiness rules, prints score /10 and band (Strong >= 8.0, Mixed >= 6.0, Weak < 6.0). Swagger 2.0 must be converted first. Size limit 5 MB.
+
+`docs` writes a static reference site (`index.html` + `llms.txt`). No outbound calls.
+
+`sdk` writes a stdlib-only client: `client.ts` (fetch) or `client.py` (urllib), with retries on 429/5xx and auth wiring from securitySchemes.
 
 Exit codes: 0 = ran, 2 = usage or parse error.
 
