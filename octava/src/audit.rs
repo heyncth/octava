@@ -47,15 +47,15 @@ impl std::fmt::Display for AuditError {
     }
 }
 
-struct Op<'a> {
-    method: &'a str,
-    path: &'a str,
-    op: &'a Value,
+pub(crate) struct Op<'a> {
+    pub(crate) method: &'a str,
+    pub(crate) path: &'a str,
+    pub(crate) op: &'a Value,
 }
 
 const METHODS: [&str; 5] = ["get", "post", "put", "patch", "delete"];
 
-fn collect_ops(doc: &Value) -> Vec<Op<'_>> {
+pub(crate) fn collect_ops(doc: &Value) -> Vec<Op<'_>> {
     let mut ops = Vec::new();
     if let Some(paths) = doc.get("paths").and_then(Value::as_object) {
         for (p, item) in paths {
@@ -73,7 +73,7 @@ fn collect_ops(doc: &Value) -> Vec<Op<'_>> {
     ops
 }
 
-fn op_label(op: &Op) -> String {
+pub(crate) fn op_label(op: &Op) -> String {
     format!("{} {}", op.method.to_uppercase(), op.path)
 }
 
@@ -92,7 +92,7 @@ fn has_schema(v: &Value) -> bool {
     v.get("schema").is_some() || v.get("$ref").is_some()
 }
 
-fn path_level_parameters<'a>(doc: &'a Value, path: &str) -> Vec<&'a Value> {
+pub(crate) fn path_level_parameters<'a>(doc: &'a Value, path: &str) -> Vec<&'a Value> {
     doc.get("paths")
         .and_then(|p| p.get(path))
         .and_then(|i| i.get("parameters"))
