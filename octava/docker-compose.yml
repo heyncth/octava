@@ -1,0 +1,13 @@
+# Render docs + generate SDKs from a local spec. No outbound calls.
+# Put your spec at ./specs/openapi.yaml, then: docker compose run --rm all
+services:
+  all:
+    build: .
+    volumes:
+      - ./specs:/specs:ro
+      - ./out:/out
+    command: >
+      sh -c "octava audit /specs/openapi.yaml
+      && octava docs /specs/openapi.yaml -o /out/docs
+      && octava sdk /specs/openapi.yaml --lang ts -o /out/sdk-ts
+      && octava sdk /specs/openapi.yaml --lang python -o /out/sdk-python"

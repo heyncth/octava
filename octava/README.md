@@ -25,6 +25,18 @@ cargo build --release
 cargo test
 ```
 
+## Docker
+
+```
+cd octava
+mkdir -p specs out
+cp your-openapi.yaml specs/openapi.yaml
+docker compose run --rm all
+# out/docs/index.html, out/sdk-ts/client.ts, out/sdk-python/client.py
+```
+
+Image runs as non-root, no network needed at runtime.
+
 ## Rules (weights sum 15.75, normalized to /10)
 
 | Rule | Weight |
