@@ -1,8 +1,10 @@
 # Octava
 
-Self-hosted OpenAPI readiness audit. Free, Apache-2.0, no account, no phone-home.
+Free self-hosted OpenAPI toolchain: readiness audit, static docs site, TypeScript + Python SDK generation. Apache-2.0, no account, no phone-home, no outbound calls at runtime.
 
 ## Usage
+
+Build first (`cargo build --release`), then:
 
 ```
 octava audit <openapi-file>
@@ -21,6 +23,7 @@ Exit codes: 0 = ran, 2 = usage or parse error.
 ## Build
 
 ```
+cd octava
 cargo build --release
 cargo test
 ```
@@ -58,6 +61,11 @@ Image runs as non-root, no network needed at runtime.
 
 Rule behavior is an original implementation of the publicly described audit algorithm (see research/octri, E-16). No Octri code or assets copied.
 
+## Repo layout
+
+- `octava/` — the tool (Rust)
+- `research/` — product research package backing the design decisions
+
 ## License
 
-Apache-2.0. See LICENSE.
+Apache-2.0. See [LICENSE](LICENSE).
