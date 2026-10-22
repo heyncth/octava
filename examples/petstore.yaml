@@ -1,0 +1,148 @@
+openapi: 3.1.0
+info:
+  title: Petstore Example API
+  version: 1.0.0
+  description: Sample spec shipped with Octava for docs and SDK demos.
+servers:
+  - url: https://api.petstore.example.com/v1
+security:
+  - apiKey: []
+tags:
+  - name: pets
+    description: Everything about pets
+paths:
+  /pets:
+    get:
+      operationId: listPets
+      summary: List pets
+      description: Returns a paginated list of pets.
+      tags: [pets]
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of pets to return.
+          schema:
+            type: integer
+            maximum: 100
+        - name: cursor
+          in: query
+          description: Opaque pagination cursor from a previous response.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Page of pets.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PetPage"
+        "400":
+          description: Invalid query parameters.
+        "429":
+          description: Rate limit exceeded.
+    post:
+      operationId: createPet
+      summary: Create a pet
+      description: Creates a new pet in the store.
+      tags: [pets]
+      requestBody:
+        description: Pet to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PetInput"
+      responses:
+        "201":
+          description: Pet created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        "400":
+          description: Invalid body.
+        "500":
+          description: Server error.
+  /pets/{petId}:
+    get:
+      operationId: getPet
+      summary: Get a pet
+      description: Fetches one pet by id.
+      tags: [pets]
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: Id of the pet to fetch.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: The pet.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        "404":
+          description: Pet not found.
+    delete:
+      operationId: deletePet
+      summary: Delete a pet
+      description: Removes a pet from the store.
+      tags: [pets]
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: Id of the pet to delete.
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Pet deleted.
+        "404":
+          description: Pet not found.
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    Pet:
+      type: object
+      required: [id, name, status]
+      properties:
+        id:
+          type: integer
+          description: Unique identifier.
+        name:
+          type: string
+          description: Display name of the pet.
+        status:
+          type: string
+          enum: [available, pending, sold]
+          description: Adoption status.
+    PetInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          description: Display name of the pet.
+        status:
+          type: string
+          enum: [available, pending, sold]
+          description: Initial adoption status.
+    PetPage:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          description: Pets in this page.
+          items:
+            $ref: "#/components/schemas/Pet"
+        cursor:
+          type: string
+          description: Cursor for the next page.

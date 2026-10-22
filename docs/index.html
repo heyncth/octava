@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Petstore Example API API reference</title>
+<style>
+:root { color-scheme: light dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+body { margin: 0 auto; max-width: 56rem; padding: 1.5rem; line-height: 1.5; }
+h1 { margin-bottom: .25rem; }
+.meta { opacity: .7; margin-top: 0; }
+.method { display: inline-block; padding: .1rem .45rem; border-radius: .3rem; background: #4a5568; color: #fff; font-size: .75rem; }
+.op { border: 1px solid rgba(128,128,128,.35); border-radius: .5rem; padding: .75rem 1rem; margin: .75rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { text-align: left; padding: .3rem .5rem; border-bottom: 1px solid rgba(128,128,128,.25); }
+.path { margin-top: 1.5rem; }
+nav a { margin-right: .75rem; }
+</style>
+</head>
+<body>
+<nav><a href="#operations">Operations</a><a href="#schemas">Schemas</a></nav>
+<h1>Petstore Example API</h1>
+<p class=meta>version 1.0.0</p>
+<p>Sample spec shipped with Octava for docs and SDK demos.</p>
+<h2>Servers</h2><ul><li><code>https://api.petstore.example.com/v1</code></li></ul>
+<h2 id=operations>Operations</h2>
+<h3 class=path><code>/pets</code></h3>
+<section class=op id="get-/pets">
+<h4><span class=method>GET</span> List pets</h4>
+<p>Returns a paginated list of pets.</p>
+<table><tr><th>Name</th><th>In</th><th>Required</th><th>Type</th><th>Description</th></tr><tr><td><code>limit</code></td><td>query</td><td>optional</td><td>integer</td><td>Maximum number of pets to return.</td></tr><tr><td><code>cursor</code></td><td>query</td><td>optional</td><td>string</td><td>Opaque pagination cursor from a previous response.</td></tr></table>
+<table><tr><th>Status</th><th>Schema</th><th>Description</th></tr><tr><td><code>200</code></td><td><code>PetPage</code></td><td>Page of pets.</td></tr><tr><td><code>400</code></td><td></td><td>Invalid query parameters.</td></tr><tr><td><code>429</code></td><td></td><td>Rate limit exceeded.</td></tr></table>
+</section>
+<section class=op id="post-/pets">
+<h4><span class=method>POST</span> Create a pet</h4>
+<p>Creates a new pet in the store.</p>
+<p><strong>Request body:</strong> Pet to create.</p>
+<table><tr><th>Status</th><th>Schema</th><th>Description</th></tr><tr><td><code>201</code></td><td><code>Pet</code></td><td>Pet created.</td></tr><tr><td><code>400</code></td><td></td><td>Invalid body.</td></tr><tr><td><code>500</code></td><td></td><td>Server error.</td></tr></table>
+</section>
+<h3 class=path><code>/pets/{petId}</code></h3>
+<section class=op id="get-/pets/petId">
+<h4><span class=method>GET</span> Get a pet</h4>
+<p>Fetches one pet by id.</p>
+<table><tr><th>Name</th><th>In</th><th>Required</th><th>Type</th><th>Description</th></tr><tr><td><code>petId</code></td><td>path</td><td>required</td><td>integer</td><td>Id of the pet to fetch.</td></tr></table>
+<table><tr><th>Status</th><th>Schema</th><th>Description</th></tr><tr><td><code>200</code></td><td><code>Pet</code></td><td>The pet.</td></tr><tr><td><code>404</code></td><td></td><td>Pet not found.</td></tr></table>
+</section>
+<section class=op id="delete-/pets/petId">
+<h4><span class=method>DELETE</span> Delete a pet</h4>
+<p>Removes a pet from the store.</p>
+<table><tr><th>Name</th><th>In</th><th>Required</th><th>Type</th><th>Description</th></tr><tr><td><code>petId</code></td><td>path</td><td>required</td><td>integer</td><td>Id of the pet to delete.</td></tr></table>
+<table><tr><th>Status</th><th>Schema</th><th>Description</th></tr><tr><td><code>204</code></td><td></td><td>Pet deleted.</td></tr><tr><td><code>404</code></td><td></td><td>Pet not found.</td></tr></table>
+</section>
+
+<h2 id=schemas>Schemas</h2>
+<section class=schema><h3><code>Pet</code></h3><ul><li><code>id</code>: <code>integer</code></li><li><code>name</code>: <code>string</code></li><li><code>status</code>: <code>string</code></li></ul></section><section class=schema><h3><code>PetInput</code></h3><ul><li><code>name</code>: <code>string</code></li><li><code>status</code>: <code>string</code></li></ul></section><section class=schema><h3><code>PetPage</code></h3><ul><li><code>cursor</code>: <code>string</code></li><li><code>items</code>: <code>array</code></li></ul></section>
+</body>
+</html>

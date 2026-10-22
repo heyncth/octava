@@ -1,0 +1,8 @@
+# Petstore Example API API (version 1.0.0)
+
+## Operations
+
+- `GET /pets` (listPets) - List pets
+- `POST /pets` (createPet) - Create a pet
+- `GET /pets/{petId}` (getPet) - Get a pet
+- `DELETE /pets/{petId}` (deletePet) - Delete a pet
